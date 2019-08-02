@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package proto;
+
+service Finance {
+    rpc GetCoinFinance (CoinFinanceRequest) returns (CoinFinanceReply) {}
+}
+
+message CoinFinanceRequest {
+    string coin = 1;
+    uint32 start_time = 2;
+    uint32 end_time = 3;
+}
+
+message CoinFinanceReply {
+    repeated FinanceItem finance_list = 1;
+}
+
+message FinanceItem {
+    string coin_key = 1;
+    double small_in = 2;
+    double middle_in = 3;
+    double big_in = 4;
+    double super_in = 5;
+    double small_out = 6;
+    double middle_out = 7;
+    double big_out = 8;
+    double super_out = 9;
+    uint32 finance_date = 10;
+    uint32 update_time = 11;
+}

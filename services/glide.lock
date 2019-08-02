@@ -1,0 +1,91 @@
+hash: d331eb0698dd2cde5464fc227741fc853c0c2ca70e1b9aaa838aec5974de7ddf
+updated: 2019-08-02T11:13:45.774702+08:00
+imports:
+- name: github.com/fsnotify/fsnotify
+  version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
+- name: github.com/go-redis/redis
+  version: 75795aa4236dc7341eefac3bbe945e68c99ef9df
+- name: github.com/go-sql-driver/mysql
+  version: 72cd26f257d44c1114970e19afddcd812016007e
+- name: github.com/golang/protobuf
+  version: 6c65a5562fc06764971b7c5d05c76c75e84bdbf7
+  subpackages:
+  - proto
+  - protoc-gen-go
+  - ptypes
+  - ptypes/any
+  - ptypes/duration
+  - ptypes/timestamp
+- name: github.com/lestrrat/go-file-rotatelogs
+  version: d3151e2a480fdcd05fb97102f5310a47d96274c4
+- name: github.com/onrik/logrus
+  version: 05335c5abaa99d4c7a3f36df162b483106ef38a8
+  subpackages:
+  - filename
+- name: github.com/rifflock/lfshook
+  version: b9218ef580f59a2e72dad1aa33d660150445d05a
+- name: github.com/sirupsen/logrus
+  version: e1e72e9de974bd926e5c56f83753fba2df402ce5
+- name: github.com/spf13/viper
+  version: b5bf975e5823809fb22c7644d008757f78a4259e
+- name: golang.org/x/net
+  version: 927f97764cc334a6575f4b7a1584a147864d5723
+  subpackages:
+  - context
+  - http/httpguts
+  - http2
+  - http2/hpack
+  - idna
+  - internal/timeseries
+  - trace
+- name: golang.org/x/sys
+  version: 82a175fd1598e8a172e58ebdf5ed262bb29129e5
+  subpackages:
+  - unix
+- name: golang.org/x/text
+  version: e6919f6577db79269a6443b9dc46d18f2238fb5d
+  subpackages:
+  - secure/bidirule
+  - transform
+  - unicode/bidi
+  - unicode/norm
+- name: google.golang.org/genproto
+  version: bd9b4fb69e2ffd37621a6caa54dcbead29b546f2
+  subpackages:
+  - googleapis/rpc/status
+- name: google.golang.org/grpc
+  version: 045159ad57f3781d409358e3ade910a018c16b30
+  subpackages:
+  - balancer
+  - balancer/base
+  - balancer/roundrobin
+  - binarylog/grpc_binarylog_v1
+  - codes
+  - connectivity
+  - credentials
+  - credentials/internal
+  - encoding
+  - encoding/proto
+  - grpclog
+  - internal
+  - internal/backoff
+  - internal/balancerload
+  - internal/binarylog
+  - internal/channelz
+  - internal/envconfig
+  - internal/grpcrand
+  - internal/grpcsync
+  - internal/syscall
+  - internal/transport
+  - keepalive
+  - metadata
+  - naming
+  - peer
+  - resolver
+  - resolver/dns
+  - resolver/passthrough
+  - serviceconfig
+  - stats
+  - status
+  - tap
+testImports: []

@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-services-demo
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s-app: k8s-services-demo    # 这个 Deployment 管理着那些拥有这个标签的 Pod
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: k8s-services-demo  # 为所有 Pod 都打上这个标签
+    spec:
+      containers:
+      - image: jianglj/demo:20190802-6083602
+        imagePullPolicy: Always  #IfNotPresent  Always  Never
+        name : demo
+        ports:
+        - containerPort: 50051
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-services-demo
+  labels:
+    k8s-svc: k8s-services-demo
+spec:
+  type: NodePort
+  ports:
+  - port: 50051
+    targetPort: 50051
+    protocol: TCP
+    nodePort: 30001
+  selector:
+    k8s-app: k8s-services-demo
+#---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: grpc-ingress
+#  annotations:
+#    kubernetes.io/ingress.class: traefik
+#    ingress.kubernetes.io/protocol: h2c
+#    traefik.protocol: h2c
+#spec:
+#  tls:
+#    - hosts:
+#        - grpc.example.com
+#      secretName: grpc-secret
+#  rules:
+#  - host: grpc.example.com
+#    http:
+#      paths:
+#      - path: /
+#        backend:
+#          serviceName: k8s-services-demo
+#          servicePort: 50051
