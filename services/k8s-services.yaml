@@ -19,12 +19,19 @@ spec:
       labels:
         k8s-app: k8s-services-demo  # 为所有 Pod 都打上这个标签
     spec:
+      volumes:
+        - name: services-log
+          persistentVolumeClaim:
+            claimName: pvc-log
       containers:
       - image: jianglj/demo:20190802-6083602
         imagePullPolicy: Always  #IfNotPresent  Always  Never
         name : demo
         ports:
         - containerPort: 50051
+        volumeMounts:
+          - mountPath: "/ticker/log"
+            name: services-log
 ---
 apiVersion: v1
 kind: Service
