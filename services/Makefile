@@ -9,14 +9,19 @@ imageName=demo
 tag=`git rev-parse --short HEAD`
 imageWholeName=${repo}/${imageName}:${compile_date}-${tag}
 port=50051
+pes_parent_dir:=$(shell pwd)/$(lastword $(MAKEFILE_LIST))
+cur_makefile_path:=$(shell dirname $(pes_parent_dir))
+proto_dir = ${cur_makefile_path}/proto
+bin_name = markets_service
 
 
 build:
-	protoc -I. --go_out=plugins=grpc:. proto/hello.proto
-	protoc -I. --go_out=plugins=grpc:. proto/finance.proto
-	go build
+	protoc -I=${proto_dir} --go_out=plugins=grpc:${proto_dir} ${proto_dir}/hello.proto
+	protoc -I=${proto_dir} --go_out=plugins=grpc:${proto_dir} ${proto_dir}/finance.proto
+	go build -o ${cur_makefile_path}/${bin_name} ${cur_makefile_path}
 
-	docker build -t jianglj/${imageName}:${compile_date}-${tag} .
+	docker build -f ${cur_makefile_path}/Dockerfile_$(mode) -t ${imageWholeName} ${cur_makefile_path}
+#	docker push ${imageWholeName}
 run:
 	docker run -d --name ${imageName} -p ${port}:${port} ${imageWholeName}
 clean:

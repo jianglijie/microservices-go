@@ -12,7 +12,7 @@
 *.out
 
 
-services/services
+services/markets_service
 client/client
 client/tls.crt
 client/tls.key

@@ -1,0 +1,10 @@
+FROM alpine:latest
+
+RUN mkdir /ticker && mkdir /ticker/log
+
+WORKDIR /ticker
+
+COPY markets_service /ticker/services
+COPY ./config/dev.toml /ticker/config.toml
+
+CMD ["./services"]
