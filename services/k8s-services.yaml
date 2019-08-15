@@ -5,6 +5,7 @@ metadata:
   namespace: default
 spec:
   replicas: 2
+  revisionHistoryLimit: 15
   selector:
     matchLabels:
       k8s-app: k8s-services-demo    # 这个 Deployment 管理着那些拥有这个标签的 Pod
@@ -25,13 +26,31 @@ spec:
             claimName: pvc-log
       containers:
       - image: jianglj/demo:20190802-6083602
-        imagePullPolicy: Always  #IfNotPresent  Always  Never
+        imagePullPolicy: IfNotPresent  #IfNotPresent  Always  Never
         name : demo
         ports:
         - containerPort: 50051
+          name: server-port
         volumeMounts:
           - mountPath: "/ticker/log"
             name: services-log
+        readinessProbe:  # 可读探针
+          tcpSocket:
+            port: server-port
+          initialDelaySeconds: 5  # 5s后开始第一次检测
+          periodSeconds: 10  # 每10s执行一次
+        livenessProbe:  # 存活探针
+          tcpSocket:
+            port: server-port
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
 ---
 apiVersion: v1
 kind: Service
@@ -43,11 +62,24 @@ spec:
   type: NodePort
   ports:
   - port: 50051
-    targetPort: 50051
+    targetPort: server-port
     protocol: TCP
     nodePort: 30001
   selector:
     k8s-app: k8s-services-demo
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-demo
+spec:
+  maxReplicas: 3 # 资源最大副本数
+  minReplicas: 1 # 资源最小副本数
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment # 需要伸缩的资源类型
+    name: k8s-services-demo  # 需要伸缩的资源名称
+  targetCPUUtilizationPercentage: 10 # 触发伸缩的cpu使用率
 #---
 #apiVersion: extensions/v1beta1
 #kind: Ingress
