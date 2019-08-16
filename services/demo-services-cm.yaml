@@ -5,16 +5,12 @@ metadata:
   name: demo-config
   namespace: default
 data:
-  config.toml: |-
-    title = "ticker-gRPC-server"
+  mysql.toml: |-
+    title = "ticker-gRPC-server-mysql-config"
     config_version = 1
-    [mysql]
-        server = "x.x.x.x"
+    [ticker]
+        server = "127.0.0.1"
         port = "3306"
         user = "root"
-        password = "root"
-        default_database = "abc"
-    [redis]
-        server = "localhost2"
-        port = "6379"
         password = "123456"
+        default_database = "abc"
