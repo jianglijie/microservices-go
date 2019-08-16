@@ -1,8 +1,6 @@
 package main
 
 import (
-	"config"
-	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"internal/finance"
@@ -21,7 +19,6 @@ type financeServer struct{}
 type testServer struct{}
 
 func (s *financeServer) GetCoinFinance(ctx context.Context, in *pb.CoinFinanceRequest) (*pb.CoinFinanceReply, error) {
-	fmt.Println(config.Config())
 	data := finance.GetCoinFinance(in.Coin, in.StartTime, in.EndTime)
 	var retList []*pb.FinanceItem
 	for _, item := range data {
