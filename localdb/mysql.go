@@ -58,7 +58,7 @@ func (rc *mysqlClient) GetInstance() *sql.DB {
 
 func (rc *mysqlClient) GetOne(sqlStr string, columns []string) (result map[string]string) {
 	row := rc.GetInstance().QueryRow(sqlStr)
-	values := make([][]byte, len(columns))
+	values := make([ ][]byte, len(columns))
 	scans := make([]interface{}, len(columns))
 	result = make(map[string]string)
 

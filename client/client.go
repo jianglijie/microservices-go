@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	address = "localhost:30001"
+	address = "localhost:50051"
 )
 
 func main() {
