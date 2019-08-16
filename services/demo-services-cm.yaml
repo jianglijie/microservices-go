@@ -1,0 +1,20 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: demo-config
+  namespace: default
+data:
+  config.toml: |-
+    title = "ticker-gRPC-server"
+    config_version = 1
+    [mysql]
+        server = "x.x.x.x"
+        port = "3306"
+        user = "root"
+        password = "root"
+        default_database = "abc"
+    [redis]
+        server = "localhost2"
+        port = "6379"
+        password = "123456"

@@ -1,3 +1,4 @@
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -24,6 +25,9 @@ spec:
         - name: services-log
           persistentVolumeClaim:
             claimName: pvc-log
+        - name: services-conf
+          configMap:
+            name: demo-config
       containers:
       - image: jianglj/demo:20190802-6083602
         imagePullPolicy: IfNotPresent  #IfNotPresent  Always  Never
@@ -34,6 +38,8 @@ spec:
         volumeMounts:
           - mountPath: "/ticker/log"
             name: services-log
+          - mountPath: "/ticker/conf"
+            name: services-conf
         readinessProbe:  # 可读探针
           tcpSocket:
             port: server-port
@@ -67,19 +73,6 @@ spec:
     nodePort: 30001
   selector:
     k8s-app: k8s-services-demo
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hpa-demo
-spec:
-  maxReplicas: 3 # 资源最大副本数
-  minReplicas: 1 # 资源最小副本数
-  scaleTargetRef:
-    apiVersion: extensions/v1beta1
-    kind: Deployment # 需要伸缩的资源类型
-    name: k8s-services-demo  # 需要伸缩的资源名称
-  targetCPUUtilizationPercentage: 10 # 触发伸缩的cpu使用率
 #---
 #apiVersion: extensions/v1beta1
 #kind: Ingress

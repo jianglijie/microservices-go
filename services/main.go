@@ -1,9 +1,12 @@
 package main
 
 import (
+	"config"
+	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"internal/finance"
+	"localdb"
 	"log"
 	"net"
 	pb "services/proto"
@@ -18,6 +21,7 @@ type financeServer struct{}
 type testServer struct{}
 
 func (s *financeServer) GetCoinFinance(ctx context.Context, in *pb.CoinFinanceRequest) (*pb.CoinFinanceReply, error) {
+	fmt.Println(config.Config())
 	data := finance.GetCoinFinance(in.Coin, in.StartTime, in.EndTime)
 	var retList []*pb.FinanceItem
 	for _, item := range data {
@@ -47,6 +51,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+	defer localdb.Mysql.GetInstance().Close()
 
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &testServer{})
