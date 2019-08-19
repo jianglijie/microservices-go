@@ -8,6 +8,7 @@ repo=jianglj
 imageName=demo
 tag=`git rev-parse --short HEAD`
 imageWholeName=${repo}/${imageName}:${compile_date}-${tag}
+imageLastName = ${repo}/${imageName}:latest
 port=50051
 pes_parent_dir:=$(shell pwd)/$(lastword $(MAKEFILE_LIST))
 cur_makefile_path:=$(shell dirname $(pes_parent_dir))
@@ -20,8 +21,10 @@ build:
 	protoc -I=${proto_dir} --go_out=plugins=grpc:${proto_dir} ${proto_dir}/finance.proto
 	go build -o ${cur_makefile_path}/${bin_name} ${cur_makefile_path}
 
-	docker build -f ${cur_makefile_path}/Dockerfile_$(mode) -t ${imageWholeName} ${cur_makefile_path}
-#	docker push ${imageWholeName}
+	docker build -f ${cur_makefile_path}/Dockerfile -t ${imageWholeName} ${cur_makefile_path}
+	docker push ${imageWholeName}
+	docker tag ${imageWholeName} ${imageLastName}
+	docker push ${imageLastName}
 run:
 	docker run -d --name ${imageName} -p ${port}:${port} ${imageWholeName}
 clean:

@@ -29,8 +29,8 @@ spec:
           configMap:
             name: demo-config
       containers:
-      - image: jianglj/demo:20190802-6083602
-        imagePullPolicy: IfNotPresent  #IfNotPresent  Always  Never
+      - image: jianglj/demo:latest
+        imagePullPolicy: Always  #IfNotPresent  Always  Never
         name : demo
         ports:
         - containerPort: 50051

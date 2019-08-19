@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mode=test
+mode=prod
 
 # docker
 make -f services/Makefile

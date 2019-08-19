@@ -5,6 +5,5 @@ RUN mkdir /ticker && mkdir /ticker/log
 WORKDIR /ticker
 
 COPY markets_service /ticker/services
-COPY ./config/prod.toml /ticker/config.toml
 
 CMD ["./services"]
