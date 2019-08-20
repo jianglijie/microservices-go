@@ -113,6 +113,7 @@ func (rc *mysqlClient) GetInstance() *sql.DB {
 			fields := make(map[string]interface{})
 			fields["type"] = "mysql-config"
 			fields["ope"] = "update-finish"
+			fields["info"] = mysqlConf
 			utils.LogWarn(content, fields)
 		})
 		rc.setConfig()
