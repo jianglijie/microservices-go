@@ -5,7 +5,7 @@ metadata:
   name: k8s-services-demo
   namespace: default
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 15
   selector:
     matchLabels:
@@ -61,7 +61,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8s-services-demo
+  name: grpc-k8s-services-demo
   labels:
     k8s-svc: k8s-services-demo
 spec:
