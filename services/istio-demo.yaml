@@ -1,0 +1,147 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-services-demo-v1
+  namespace: default
+  labels:
+    app: k8s-services-demo
+    version: v1
+spec:
+  replicas: 1
+  revisionHistoryLimit: 15
+  selector:
+    matchLabels:
+      app: k8s-services-demo
+      version: v1
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: k8s-services-demo
+        version: v1
+    spec:
+      volumes:
+        - name: services-log
+          persistentVolumeClaim:
+            claimName: pvc-log
+        - name: services-conf
+          configMap:
+            name: demo-config
+      containers:
+      - image: jianglj/demo:20190919-2a31c4b
+        imagePullPolicy: IfNotPresent  #IfNotPresent  Always  Never
+        name : grpc-demo
+        ports:
+        - containerPort: 50051
+          name: grpc-pod-port
+          protocol: TCP
+        volumeMounts:
+          - mountPath: "/ticker/log"
+            name: services-log
+          - mountPath: "/ticker/conf"
+            name: services-conf
+        readinessProbe:  # 可读探针
+          tcpSocket:
+            port: grpc-pod-port
+          initialDelaySeconds: 5  # 5s后开始第一次检测
+          periodSeconds: 10  # 每10s执行一次
+        livenessProbe:  # 存活探针
+          tcpSocket:
+            port: grpc-pod-port
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-k8s-services-demo
+  labels:
+    app: k8s-services-demo-svc
+spec:
+#  type: NodePort
+  ports:
+  - port: 50051
+    targetPort: grpc-pod-port
+    protocol: TCP
+#    nodePort: 30001
+    name: grpc-service-port
+  selector:
+    app: k8s-services-demo
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-services-demo-v2
+  namespace: default
+  labels:
+    app: k8s-services-demo
+    version: v2
+spec:
+  replicas: 1
+  revisionHistoryLimit: 15
+  selector:
+    matchLabels:
+      app: k8s-services-demo
+      version: v2
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: k8s-services-demo
+        version: v2
+    spec:
+      volumes:
+        - name: services-log
+          persistentVolumeClaim:
+            claimName: pvc-log
+        - name: services-conf
+          configMap:
+            name: demo-config
+      containers:
+      - image: jianglj/demo:20190920-2a31c4b
+        imagePullPolicy: IfNotPresent  #IfNotPresent  Always  Never
+        name : grpc-demo
+        ports:
+        - containerPort: 50051
+          name: grpc-pod-port
+          protocol: TCP
+        volumeMounts:
+          - mountPath: "/ticker/log"
+            name: services-log
+          - mountPath: "/ticker/conf"
+            name: services-conf
+        readinessProbe:  # 可读探针
+          tcpSocket:
+            port: grpc-pod-port
+          initialDelaySeconds: 5  # 5s后开始第一次检测
+          periodSeconds: 10  # 每10s执行一次
+        livenessProbe:  # 存活探针
+          tcpSocket:
+            port: grpc-pod-port
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi

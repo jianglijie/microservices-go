@@ -39,7 +39,7 @@ func (s *financeServer) GetCoinFinance(ctx context.Context, in *pb.CoinFinanceRe
 }
 
 func (s *testServer) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) { // 服务端实现 proto 中定义的方法
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil //拼接客户端发送过来的消息，并返回给客户端
+	return &pb.HelloReply{Message: "Hello " + in.Name, Version: "2"}, nil //拼接客户端发送过来的消息，并返回给客户端
 }
 
 

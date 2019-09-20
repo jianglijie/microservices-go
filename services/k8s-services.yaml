@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: k8s-services-demo
   namespace: default
+  labels:
+    app: market-service
+    version: v1
 spec:
   replicas: 1
   revisionHistoryLimit: 15

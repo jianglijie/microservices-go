@@ -1,0 +1,63 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: demo-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 31400
+      name: grpc-gateway
+      protocol: GRPC
+#    tls:
+#      mode: SIMPLE
+#      serverCertificate: /Users/jianglj/work/go-ms/src/client/tls.crt
+#      privateKey: /Users/jianglj/work/go-ms/src/client/tls.key
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: k8s-services-demo
+spec:
+  host: grpc-k8s-services-demo
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: k8s-services-demo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - demo-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+#    fault:
+#      delay:
+#        percent: 100
+#        fixedDelay: 2s
+    route:
+    - destination:
+        host: grpc-k8s-services-demo
+        port:
+          number: 50051
+        subset: v2
+#      weight: 75
+#    - destination:
+#        host: grpc-k8s-services-demo
+#        port:
+#          number: 50051
+#        subset: v1
+#      weight: 25

@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	address = "localhost:50051"
+	address = "localhost:31400"
 )
 
 func main() {
@@ -30,5 +30,5 @@ func main() {
 	if err1 != nil {
 		log.Fatalf("could not greet: %v", err1)
 	}
-	log.Printf("data: %s", r1.Message)
+	log.Printf("data: %s| version: %s", r1.Message, r1.Version)
 }
